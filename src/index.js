@@ -4,10 +4,24 @@ import './index.css';
 
 
 class Cell extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
+            isAlive: false
+        };
+    }
+
+    flipLifeState() {
+        this.setState({
+            isAlive: !this.state.isAlive
+        });
+    }
+
     render() {
         return (
-            <button className="cell" onClick={() => alert('click')}>
-                {this.props.value}
+            <button className="cell" onClick={() => this.flipLifeState()}>
+                {this.state.isAlive ? 1 : 0}
             </button>
         );
     }
@@ -19,7 +33,7 @@ class Row extends React.Component {
 
         for (let cellNum=0; cellNum<cellsPerRow; cellNum++) {
             newRow.push(
-                <Cell key={[rowNum,cellNum]} value={0}/>
+                <Cell key={[rowNum,cellNum]}/>
             );
         }
 
@@ -45,7 +59,7 @@ class Board extends React.Component {
 
         for (let row=0; row<cellRowCount; row++) {
             rows.push(
-                <Row id={row} />
+                <Row key={'row' + row} id={row} />
             );
         }
 
