@@ -9,7 +9,10 @@ class Cell extends React.Component {
         const rowNum = this.props.rowNum;
 
         return (
-            <button className="cell" onClick={() => this.props.handleClick(rowNum, cellNum)}>
+            <button
+                className={this.props.isAlive ? 'cell alive' : 'cell'}
+                onClick={() => this.props.handleClick(rowNum, cellNum)}
+            >
                 {this.props.isAlive ? 1 : 0}
             </button>
         );
@@ -24,7 +27,7 @@ class Row extends React.Component {
             newRow.push(
                 <Cell
                     key={[rowNum,cellNum]}
-                    isAlive={cells[cellNum]}
+                    isAlive={cells[cellNum].isAlive}
                     cellNum={cellNum}
                     rowNum={rowNum}
                     handleClick={(rowNum, cellNum) => this.props.handleClick(rowNum,cellNum)}
