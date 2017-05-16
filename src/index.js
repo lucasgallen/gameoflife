@@ -56,38 +56,18 @@ class Row extends React.Component {
 }
 
 class Board extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            rows: Array(10).fill(Array(10).fill(true))
-        }
-    }
-
-    flipLifeState(rowNum, cellNum) {
-        const rows = this.state.rows.slice();
-        const cellsInRow = rows[rowNum].slice();
-
-        cellsInRow[cellNum] = !cellsInRow[cellNum];
-        rows[rowNum] = cellsInRow;
-
-        this.setState({
-            rows: rows
-        });
-    }
-
     render() {
-        const cellRowCount = this.state.rows.length;
+        const cellRowCount = this.props.rows.length;
         const rows = [];
 
         for (let row=0; row<cellRowCount; row++) {
-            let cellsInRow = this.state.rows[row];
+            let cellsInRow = this.props.rows[row];
             rows.push(
                 <Row
                     key={'row' + row}
                     id={row}
                     cells={cellsInRow}
-                    handleClick={(row, cell) => this.flipLifeState(row, cell)}
+                    handleClick={(rowNum, cellNum) => this.props.handleClick(rowNum, cellNum)}
                 />
             );
         }
@@ -101,6 +81,40 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
+            history: [{
+                cellRows: Array(10).fill(Array(10).fill(false))
+            }],
+            stepNumber: 0,
+        };
+    }
+
+    flipLifeState(rowNum, cellNum) {
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = history[history.length - 1];
+        const rows = current.cellRows.slice();
+        const cellsInRow = rows[rowNum].slice();
+
+        cellsInRow[cellNum] = !cellsInRow[cellNum];
+        rows[rowNum] = cellsInRow;
+
+        this.setState({
+            history: history.concat([{
+                cellRows: rows
+            }]),
+            stepNumber: history.length
+        });
+    }
+
+    jumpTo(step) {
+        this.setState({
+            stepNumber: step,
+        });
+    }
+
     // Steps through each board state
         // Check previous board state
         // Set the new state of the board for each cell
@@ -108,11 +122,26 @@ class Game extends React.Component {
         // Render board with new state
 
     render() {
+        const history = this.state.history;
+        const current = history[this.state.stepNumber];
+
+        const steps = history.map((step, state) => {
+            return (
+                <li key={state}>
+                    <a href="#" onClick={() => this.jumpTo(state)}>'board state'</a>
+                </li>
+            );
+        });
+
         return (
             <div className="game">
                 <div className="game-board">
-                    <Board />
+                    <Board
+                        rows={current.cellRows}
+                        handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum)}
+                    />
                 </div>
+                <ol>{steps}</ol>
             </div>
         );
     }
