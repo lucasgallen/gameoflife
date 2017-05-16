@@ -89,6 +89,7 @@ class Game extends React.Component {
                 cellRows: Array(10).fill(Array(10).fill(false))
             }],
             stepNumber: 0,
+            isLive: false,
         };
     }
 
@@ -121,9 +122,35 @@ class Game extends React.Component {
         // Save new state to old state
         // Render board with new state
 
+    playGame() {
+        this.setState({
+            isLive: true
+        });
+    }
+
+    pauseGame() {
+        this.setState({
+            isLive: false
+        });
+    }
+
+    runGame() {
+        const history = this.state.history.slice(0);
+        const current = history[history.length - 1];
+        const rows = current.cellRows.slice();
+
+        this.setState({
+            history: history.concat([{
+                cellRows: getNewBoard(rows)
+            }]),
+            stepNumber: history.length
+        });
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
+        const latest = history[history.length - 1];
 
         const steps = history.map((step, state) => {
             return (
@@ -133,6 +160,10 @@ class Game extends React.Component {
             );
         });
 
+        if (this.state.isLive) {
+            setTimeout(() => this.runGame(latest.cellRows), 1000);
+        }
+
         return (
             <div className="game">
                 <div className="game-board">
@@ -141,10 +172,21 @@ class Game extends React.Component {
                         handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum)}
                     />
                 </div>
+                <button onClick={() => this.pauseGame()}>pause</button>
+                <button onClick={() => this.playGame()}>play</button>
                 <ol>{steps}</ol>
             </div>
         );
     }
+}
+
+function getNewBoard(cellRows) {
+    // Check cell neighbors to assign cell to die or live
+    // Returns new cellRows
+
+    // TODO: Implement neighbor check
+
+    return cellRows;
 }
 
 ReactDOM.render(
