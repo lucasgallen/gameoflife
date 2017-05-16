@@ -29,3 +29,7 @@
     text-align: center;
     width: 50px;
 }
+
+.cell.alive {
+    background: cyan;
+}
