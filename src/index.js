@@ -4,14 +4,6 @@ import './index.css';
 
 
 class Cell extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            isAlive: false
-        };
-    }
-
     render() {
         const cellNum = this.props.cellNum;
         const rowNum = this.props.rowNum;
