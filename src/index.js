@@ -73,12 +73,22 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        const numRows = this.props.numRows;
+        const cellsPerRow = this.props.cellsPerRow;
 
         this.state = {
             history: [{
-                cellRows: Array(10).fill(Array(10).fill(false))
+                cellRows: Array(numRows).fill(0).map(() => {
+                        return Array(cellsPerRow).fill(0).map(() => {
+                            return {
+                                isAlive: false,
+                                nghbrCount: 0
+                            };
+                        })
+                    })
             }],
             stepNumber: 0,
             isLive: false,
@@ -87,11 +97,12 @@ class Game extends React.Component {
 
     flipLifeState(rowNum, cellNum) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        const current = history[history.length - 1];
+        const historyCopy = JSON.parse(JSON.stringify(history));
+        const current = historyCopy[historyCopy.length - 1];
         const rows = current.cellRows.slice();
         const cellsInRow = rows[rowNum].slice();
 
-        cellsInRow[cellNum] = !cellsInRow[cellNum];
+        cellsInRow[cellNum].isAlive = !cellsInRow[cellNum].isAlive;
         rows[rowNum] = cellsInRow;
 
         this.setState({
@@ -127,13 +138,14 @@ class Game extends React.Component {
     }
 
     runGame() {
-        const history = this.state.history.slice(0);
+        const history = JSON.parse(JSON.stringify(this.state.history));
         const current = history[history.length - 1];
         const rows = current.cellRows.slice();
+        const newRows = getNewBoard(rows);
 
         this.setState({
             history: history.concat([{
-                cellRows: getNewBoard(rows)
+                cellRows: newRows
             }]),
             stepNumber: history.length
         });
@@ -182,6 +194,6 @@ function getNewBoard(cellRows) {
 }
 
 ReactDOM.render(
-    <Game />,
+    <Game numRows={10} cellsPerRow={10} />,
     document.getElementById('root')
 );
