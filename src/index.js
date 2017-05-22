@@ -141,8 +141,12 @@ class Game extends React.Component {
         // Save new state to old state
         // Render board with new state
 
-    toggleGame() {
+    toggleGame(timeoutID) {
         const isLive = this.state.isLive;
+
+        if (timeoutID) {
+            clearTimeout(timeoutID);
+        }
 
         this.setState({
             isLive: !isLive,
@@ -189,7 +193,7 @@ class Game extends React.Component {
                     />
                 </div>
                 <PlayPause
-                    handleClick={() => this.toggleGame()}
+                    handleClick={() => this.toggleGame(timeoutID)}
                     state={this.state.isLive ? 'Pause' : 'Play'}
                 />
                 <ol>{steps}</ol>
