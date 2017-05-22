@@ -107,7 +107,7 @@ class Game extends React.Component {
         };
     }
 
-    flipLifeState(rowNum, cellNum) {
+    flipLifeState(rowNum, cellNum, timeoutID) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const historyCopy = JSON.parse(JSON.stringify(history));
         const current = historyCopy[historyCopy.length - 1];
@@ -116,6 +116,10 @@ class Game extends React.Component {
 
         cellsInRow[cellNum].isAlive = !cellsInRow[cellNum].isAlive;
         rows[rowNum] = cellsInRow;
+
+        if (timeoutID) {
+            clearTimeout(timeoutID);
+        }
 
         this.setState({
             history: history.concat([{
@@ -162,7 +166,7 @@ class Game extends React.Component {
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
-        const latest = history[history.length - 1];
+        let timeoutID = null;
 
         const steps = history.map((step, state) => {
             return (
@@ -173,7 +177,7 @@ class Game extends React.Component {
         });
 
         if (this.state.isLive) {
-            setTimeout(() => this.runGame(latest.cellRows), 1000);
+            timeoutID = setTimeout(() => this.runGame(), 500);
         }
 
         return (
@@ -181,7 +185,7 @@ class Game extends React.Component {
                 <div className="game-board">
                     <Board
                         rows={current.cellRows}
-                        handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum)}
+                        handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum, timeoutID)}
                     />
                 </div>
                 <PlayPause
