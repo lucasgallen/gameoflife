@@ -76,6 +76,14 @@ class Board extends React.Component {
     }
 }
 
+class PlayPause extends React.Component {
+    render() {
+        return (
+            <button onClick={() => this.props.handleClick()}>{this.props.state}</button>
+        );
+    }
+}
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -129,15 +137,11 @@ class Game extends React.Component {
         // Save new state to old state
         // Render board with new state
 
-    playGame() {
-        this.setState({
-            isLive: true
-        });
-    }
+    toggleGame() {
+        const isLive = this.state.isLive;
 
-    pauseGame() {
         this.setState({
-            isLive: false
+            isLive: !isLive,
         });
     }
 
@@ -180,8 +184,10 @@ class Game extends React.Component {
                         handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum)}
                     />
                 </div>
-                <button onClick={() => this.pauseGame()}>pause</button>
-                <button onClick={() => this.playGame()}>play</button>
+                <PlayPause
+                    handleClick={() => this.toggleGame()}
+                    state={this.state.isLive ? 'Pause' : 'Play'}
+                />
                 <ol>{steps}</ol>
             </div>
         );
