@@ -84,6 +84,22 @@ class PlayPause extends React.Component {
     }
 }
 
+class SpeedInput extends React.Component {
+    render() {
+        return (
+            <label>
+                <input type="radio"
+                    value={this.props.value}
+                    name="cycle speed"
+                    checked={this.props.checked}
+                    onChange={() => this.props.handleClick()}
+                ></input>
+                {this.props.name}
+            </label>
+        );
+    }
+}
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -104,7 +120,18 @@ class Game extends React.Component {
             }],
             stepNumber: 0,
             isLive: false,
+            gameSpeed: 'normal',
         };
+    }
+
+    updateSpeed(speed, timeoutID) {
+        if (timeoutID) {
+            clearTimeout(timeoutID);
+        }
+
+        this.setState({
+            gameSpeed: speed
+        });
     }
 
     flipLifeState(rowNum, cellNum, timeoutID) {
@@ -170,7 +197,14 @@ class Game extends React.Component {
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
-        let timeoutID = null;
+
+        const speedKey = {
+            'slow' : 1500,
+            'normal' : 1000,
+            'fast' : 500
+        }
+
+        const gameSpeed = speedKey[this.state.gameSpeed];
 
         const steps = history.map((step, state) => {
             return (
@@ -180,8 +214,10 @@ class Game extends React.Component {
             );
         });
 
+        let timeoutID = null;
+
         if (this.state.isLive) {
-            timeoutID = setTimeout(() => this.runGame(), 500);
+            timeoutID = setTimeout(() => this.runGame(), gameSpeed);
         }
 
         return (
@@ -191,6 +227,24 @@ class Game extends React.Component {
                         rows={current.cellRows}
                         handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum, timeoutID)}
                     />
+                    <fieldset>
+                        <legend>Life Cycle Speed</legend>
+                        <SpeedInput
+                            checked={this.state.gameSpeed === 'slow'}
+                            name="slow"
+                            handleClick={() => this.updateSpeed('slow', timeoutID)}
+                        />
+                        <SpeedInput
+                            checked={this.state.gameSpeed === 'normal'}
+                            name="normal"
+                            handleClick={() => this.updateSpeed('normal', timeoutID)}
+                        />
+                        <SpeedInput
+                            checked={this.state.gameSpeed === 'fast'}
+                            name="fast"
+                            handleClick={() => this.updateSpeed('fast', timeoutID)}
+                        />
+                   </fieldset>
                 </div>
                 <PlayPause
                     handleClick={() => this.toggleGame(timeoutID)}
