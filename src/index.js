@@ -188,6 +188,8 @@ class Game extends React.Component {
         if (this.state.isLive) {
             this.toggleGame();
         }
+
+        this.jumpTo(step);
     }
 
     // Steps through each board state
@@ -271,7 +273,7 @@ class Game extends React.Component {
                     <HistorySlider
                         min={1}
                         max={history.length - 1}
-                        handleChange={(step) => this.jumpTo(step)}
+                        handleChange={(step) => this.slideHistory(step)}
                     />
                 </div>
             </div>
