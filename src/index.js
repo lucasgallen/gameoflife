@@ -192,6 +192,7 @@ class Game extends React.Component {
         this.jumpTo(step);
     }
 
+    // TODO: update comments
     // Steps through each board state
         // Check previous board state
         // Set the new state of the board for each cell
