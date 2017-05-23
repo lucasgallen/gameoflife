@@ -223,14 +223,6 @@ class Game extends React.Component {
 
         const gameSpeed = speedKey[this.state.gameSpeed];
 
-        const steps = history.map((step, state) => {
-            return (
-                <li key={state}>
-                    <a href="#" onClick={() => this.jumpTo(state)}>'board state'</a>
-                </li>
-            );
-        });
-
         let timeoutID = null;
 
         if (this.state.isLive) {
@@ -273,7 +265,6 @@ class Game extends React.Component {
                     handleClick={() => this.toggleGame(timeoutID)}
                     state={this.state.isLive ? 'Pause' : 'Play'}
                 />
-                <ol>{steps}</ol>
             </div>
         );
     }
