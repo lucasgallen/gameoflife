@@ -222,6 +222,65 @@ class Game extends React.Component {
         });
     }
 
+    handleMouseDown(e) {
+        let initPos = {
+            x: e.clientX,
+            y: e.clientY,
+        };
+        let changedCells = [];
+        let isPaused = false;
+
+        const self = this;
+        const deltaTrigger = 15;
+
+        function handleMouseMove(e) {
+            const currentPos = {
+                x: e.clientX,
+                y: e.clientY
+            };
+
+            const deltaX = currentPos.x - initPos.x;
+            const deltaY = currentPos.y - initPos.y;
+            const distance = Math.sqrt((deltaX*deltaX) + (deltaY*deltaY));
+
+            if (distance > deltaTrigger) {
+                const cell = document.elementFromPoint(currentPos.x, currentPos.y);
+
+                if (changedCells.indexOf(cell) === -1) {
+                    changedCells.push(cell);
+                    cell.click();
+                }
+
+                if (self.state.isLive) {
+                    self.toggleGame();
+                    isPaused = true;
+                }
+
+                initPos.x = currentPos.x;
+                initPos.y = currentPos.y;
+            }
+
+            e.preventDefault();
+        }
+
+        function handleMouseUp(e) {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+
+            if (isPaused) {
+                self.toggleGame();
+            }
+
+            e.preventDefault();
+        }
+
+        document.addEventListener('mouseup', handleMouseUp);
+        document.addEventListener('mousemove', handleMouseMove);
+
+        e.preventDefault();
+    }
+
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -241,10 +300,14 @@ class Game extends React.Component {
         return (
             <div className="game">
                 <div className="game-board">
-                    <Board
-                        rows={current.cellRows}
-                        handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum)}
-                    />
+                    <div
+                        onMouseDownCapture={(e) => this.handleMouseDown(e)}
+                    >
+                        <Board
+                            rows={current.cellRows}
+                            handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum)}
+                        />
+                    </div>
 
                     <PlayPause
                         handleClick={() => this.toggleGame()}
