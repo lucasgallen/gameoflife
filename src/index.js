@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Slider from 'rc-slider';
+import board from './board.js';
 import './index.css';
-
-const board =  require('./board.js');
 import 'rc-slider/assets/index.css';
 
 class Cell extends React.Component {
