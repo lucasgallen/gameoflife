@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Slider from 'rc-slider';
 import './index.css';
 
 const board =  require('./board.js');
+import 'rc-slider/assets/index.css';
 
 class Cell extends React.Component {
     render() {
@@ -96,6 +98,22 @@ class SpeedInput extends React.Component {
                 ></input>
                 {this.props.name}
             </label>
+        );
+    }
+}
+
+class HistorySlider extends React.Component {
+    render() {
+        return (
+            <fieldset className="history-slider">
+                <legend>History Slider</legend>
+                <div className="history-length">{this.props.max}</div>
+                <Slider
+                    min={this.props.min}
+                    max={this.props.max}
+                    onChange={(step) => this.props.handleChange(step)}
+                />
+            </fieldset>
         );
     }
 }
@@ -245,6 +263,12 @@ class Game extends React.Component {
                             handleClick={() => this.updateSpeed('fast', timeoutID)}
                         />
                    </fieldset>
+
+                    <HistorySlider
+                        min={1}
+                        max={history.length - 1}
+                        handleChange={(step) => this.jumpTo(step)}
+                    />
                 </div>
                 <PlayPause
                     handleClick={() => this.toggleGame(timeoutID)}
