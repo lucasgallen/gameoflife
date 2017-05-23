@@ -221,6 +221,10 @@ class Game extends React.Component {
             }]),
             stepNumber: history.length
         });
+
+        if (newBoard.allCellsDead) {
+            this.toggleGame();
+        }
     }
 
     handleMouseDown(e) {
