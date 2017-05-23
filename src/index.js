@@ -80,7 +80,7 @@ class Board extends React.Component {
 class PlayPause extends React.Component {
     render() {
         return (
-            <button onClick={() => this.props.handleClick()}>{this.props.state}</button>
+            <button className="button" onClick={() => this.props.handleClick()}>{this.props.state}</button>
         );
     }
 }
@@ -236,7 +236,13 @@ class Game extends React.Component {
                         rows={current.cellRows}
                         handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum, timeoutID)}
                     />
-                    <fieldset>
+
+                    <PlayPause
+                        handleClick={() => this.toggleGame(timeoutID)}
+                        state={this.state.isLive ? 'Pause' : 'Play'}
+                    />
+
+                    <fieldset className="cycle-speed">
                         <legend>Life Cycle Speed</legend>
                         <SpeedInput
                             checked={this.state.gameSpeed === 'slow'}
@@ -253,7 +259,7 @@ class Game extends React.Component {
                             name="fast"
                             handleClick={() => this.updateSpeed('fast', timeoutID)}
                         />
-                   </fieldset>
+                    </fieldset>
 
                     <HistorySlider
                         min={1}
@@ -261,10 +267,6 @@ class Game extends React.Component {
                         handleChange={(step) => this.jumpTo(step)}
                     />
                 </div>
-                <PlayPause
-                    handleClick={() => this.toggleGame(timeoutID)}
-                    state={this.state.isLive ? 'Pause' : 'Play'}
-                />
             </div>
         );
     }
