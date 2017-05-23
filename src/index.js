@@ -141,9 +141,10 @@ class Game extends React.Component {
         };
     }
 
-    updateSpeed(speed, timeoutID) {
-        if (timeoutID) {
-            clearTimeout(timeoutID);
+    updateSpeed(speed) {
+        if (this.timeoutID) {
+            clearTimeout(this.timeoutID);
+            this.timeoutID = null;
         }
 
         this.setState({
@@ -151,7 +152,7 @@ class Game extends React.Component {
         });
     }
 
-    flipLifeState(rowNum, cellNum, timeoutID) {
+    flipLifeState(rowNum, cellNum) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const historyCopy = JSON.parse(JSON.stringify(history));
         const current = historyCopy[historyCopy.length - 1];
@@ -161,8 +162,9 @@ class Game extends React.Component {
         cellsInRow[cellNum].isAlive = !cellsInRow[cellNum].isAlive;
         rows[rowNum] = cellsInRow;
 
-        if (timeoutID) {
-            clearTimeout(timeoutID);
+        if (this.timeoutID) {
+            clearTimeout(this.timeoutID);
+            this.timeoutID = null;
         }
 
         this.setState({
@@ -179,23 +181,32 @@ class Game extends React.Component {
         });
     }
 
+    slideHistory(step) {
+        if (this.state.isLive) {
+            this.toggleGame();
+        }
+    }
+
     // Steps through each board state
         // Check previous board state
         // Set the new state of the board for each cell
         // Save new state to old state
         // Render board with new state
 
-    toggleGame(timeoutID) {
+    toggleGame() {
         const isLive = this.state.isLive;
 
-        if (timeoutID) {
-            clearTimeout(timeoutID);
+        if (this.timeoutID) {
+            clearTimeout(this.timeoutID);
+            this.timeoutID = null
         }
 
         this.setState({
             isLive: !isLive,
         });
     }
+
+    timeoutID = null;
 
     runGame() {
         const history = JSON.parse(JSON.stringify(this.state.history));
@@ -223,10 +234,8 @@ class Game extends React.Component {
 
         const gameSpeed = speedKey[this.state.gameSpeed];
 
-        let timeoutID = null;
-
         if (this.state.isLive) {
-            timeoutID = setTimeout(() => this.runGame(), gameSpeed);
+            this.timeoutID = setTimeout(() => this.runGame(), gameSpeed);
         }
 
         return (
@@ -234,11 +243,11 @@ class Game extends React.Component {
                 <div className="game-board">
                     <Board
                         rows={current.cellRows}
-                        handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum, timeoutID)}
+                        handleClick={(rowNum, cellNum) => this.flipLifeState(rowNum, cellNum)}
                     />
 
                     <PlayPause
-                        handleClick={() => this.toggleGame(timeoutID)}
+                        handleClick={() => this.toggleGame()}
                         state={this.state.isLive ? 'Pause' : 'Play'}
                     />
 
@@ -247,17 +256,17 @@ class Game extends React.Component {
                         <SpeedInput
                             checked={this.state.gameSpeed === 'slow'}
                             name="slow"
-                            handleClick={() => this.updateSpeed('slow', timeoutID)}
+                            handleClick={() => this.updateSpeed('slow')}
                         />
                         <SpeedInput
                             checked={this.state.gameSpeed === 'normal'}
                             name="normal"
-                            handleClick={() => this.updateSpeed('normal', timeoutID)}
+                            handleClick={() => this.updateSpeed('normal')}
                         />
                         <SpeedInput
                             checked={this.state.gameSpeed === 'fast'}
                             name="fast"
-                            handleClick={() => this.updateSpeed('fast', timeoutID)}
+                            handleClick={() => this.updateSpeed('fast')}
                         />
                     </fieldset>
 
