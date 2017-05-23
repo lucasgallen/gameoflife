@@ -1,12 +1,10 @@
-
-exports.getNewBoard = getNewBoard;
-
 function getNewBoard(cellRows) {
     // Check cell neighbors to assign cell to die or live
     // Args cellRows Array
     // Returns new cellRows
 
     const numRows = cellRows.length;
+    let isBoardDead = true;
 
     for (let i=0;i<numRows;i++) {
         let cells = cellRows[i];
@@ -135,17 +133,24 @@ function getNewBoard(cellRows) {
             if (cellRows[i][j].isAlive) {
                 if (cellRows[i][j].nghbrCount === 2 || cellRows[i][j].nghbrCount === 3) {
                     cellRows[i][j].isAlive = true;
+                    isBoardDead = false;
                 } else {
                     cellRows[i][j].isAlive = false;
                 }
             } else {
                 if (cellRows[i][j].nghbrCount === 3) {
                     cellRows[i][j].isAlive = true;
+                    isBoardDead = false;
                 }
             }
         }
     }
 
 
-    return cellRows;
+    return {
+        rows: cellRows,
+        allCellsDead: isBoardDead
+    };
 }
+
+exports.getNewBoard = getNewBoard;

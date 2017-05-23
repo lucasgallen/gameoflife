@@ -213,11 +213,11 @@ class Game extends React.Component {
         const history = JSON.parse(JSON.stringify(this.state.history));
         const current = history[history.length - 1];
         const rows = current.cellRows.slice();
-        const newRows = board.getNewBoard(rows);
+        const newBoard = board.getNewBoard(rows);
 
         this.setState({
             history: history.concat([{
-                cellRows: newRows
+                cellRows: newBoard.rows
             }]),
             stepNumber: history.length
         });
