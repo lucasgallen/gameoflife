@@ -141,11 +141,17 @@ class Game extends React.Component {
         };
     }
 
-    updateSpeed(speed) {
+    timeoutID = null;
+
+    clearTimeout() {
         if (this.timeoutID) {
             clearTimeout(this.timeoutID);
             this.timeoutID = null;
         }
+    }
+
+    updateSpeed(speed) {
+        this.clearTimeout();
 
         this.setState({
             gameSpeed: speed
@@ -162,10 +168,7 @@ class Game extends React.Component {
         cellsInRow[cellNum].isAlive = !cellsInRow[cellNum].isAlive;
         rows[rowNum] = cellsInRow;
 
-        if (this.timeoutID) {
-            clearTimeout(this.timeoutID);
-            this.timeoutID = null;
-        }
+        this.clearTimeout();
 
         this.setState({
             history: history.concat([{
@@ -196,17 +199,12 @@ class Game extends React.Component {
     toggleGame() {
         const isLive = this.state.isLive;
 
-        if (this.timeoutID) {
-            clearTimeout(this.timeoutID);
-            this.timeoutID = null
-        }
+        this.clearTimeout();
 
         this.setState({
             isLive: !isLive,
         });
     }
-
-    timeoutID = null;
 
     runGame() {
         const history = JSON.parse(JSON.stringify(this.state.history));
