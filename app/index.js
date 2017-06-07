@@ -2,8 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Slider from 'rc-slider';
 import board from './board.js';
-import './index.css';
+import styles from './index.css';
 import 'rc-slider/assets/index.css';
+
+
+let timeoutID = null;
 
 class Cell extends React.Component {
     render() {
@@ -12,7 +15,7 @@ class Cell extends React.Component {
 
         return (
             <button
-                className={this.props.isAlive ? 'cell alive' : 'cell'}
+                className={this.props.isAlive ? styles.cellAlive : styles.cell}
                 onClick={() => this.props.handleClick(rowNum, cellNum)}
             >
                 {this.props.isAlive ? 1 : 0}
@@ -45,7 +48,7 @@ class Row extends React.Component {
         const rowId = this.props.id;
 
         return (
-            <div className="cell-row">
+            <div className={styles.cellRow}>
                 {this.renderCells(rowId, cells)}
             </div>
         );
@@ -80,7 +83,7 @@ class Board extends React.Component {
 class PlayPause extends React.Component {
     render() {
         return (
-            <button className="button" onClick={() => this.props.handleClick()}>{this.props.state}</button>
+            <button className={styles.button} onClick={() => this.props.handleClick()}>{this.props.state}</button>
         );
     }
 }
@@ -89,9 +92,9 @@ class SpeedInput extends React.Component {
     render() {
         return (
             <label>
-                <input type="radio"
+                <input type='radio'
                     value={this.props.value}
-                    name="cycle speed"
+                    name='cycle speed'
                     checked={this.props.checked}
                     onChange={() => this.props.handleClick()}
                 ></input>
@@ -104,9 +107,9 @@ class SpeedInput extends React.Component {
 class HistorySlider extends React.Component {
     render() {
         return (
-            <fieldset className="history-slider">
+            <fieldset className='history-slider'>
                 <legend>History Slider</legend>
-                <div className="history-length">{this.props.max}</div>
+                <div className={styles.historyLength}>{this.props.max}</div>
                 <Slider
                     min={this.props.min}
                     max={this.props.max}
@@ -127,13 +130,13 @@ class Game extends React.Component {
         this.state = {
             history: [{
                 cellRows: Array(numRows).fill(0).map(() => {
-                        return Array(cellsPerRow).fill(0).map(() => {
-                            return {
-                                isAlive: false,
-                                nghbrCount: 0
-                            };
-                        })
-                    })
+                    return Array(cellsPerRow).fill(0).map(() => {
+                        return {
+                            isAlive: false,
+                            nghbrCount: 0
+                        };
+                    });
+                })
             }],
             stepNumber: 0,
             isLive: false,
@@ -141,12 +144,10 @@ class Game extends React.Component {
         };
     }
 
-    timeoutID = null;
-
     clearTimeout() {
-        if (this.timeoutID) {
-            clearTimeout(this.timeoutID);
-            this.timeoutID = null;
+        if (timeoutID) {
+            clearTimeout(timeoutID);
+            timeoutID = null;
         }
     }
 
@@ -294,17 +295,17 @@ class Game extends React.Component {
             'slow' : 1500,
             'normal' : 1000,
             'fast' : 500
-        }
+        };
 
         const gameSpeed = speedKey[this.state.gameSpeed];
 
         if (this.state.isLive) {
-            this.timeoutID = setTimeout(() => this.runGame(), gameSpeed);
+            timeoutID = setTimeout(() => this.runGame(), gameSpeed);
         }
 
         return (
-            <div className="game">
-                <div className="game-board">
+            <div className='game'>
+                <div className={styles.gameBoard}>
                     <div
                         onMouseDownCapture={(e) => this.handleMouseDown(e)}
                     >
@@ -319,21 +320,21 @@ class Game extends React.Component {
                         state={this.state.isLive ? 'Pause' : 'Play'}
                     />
 
-                    <fieldset className="cycle-speed">
+                    <fieldset className={styles.cycleSpeed}>
                         <legend>Life Cycle Speed</legend>
                         <SpeedInput
                             checked={this.state.gameSpeed === 'slow'}
-                            name="slow"
+                            name='slow'
                             handleClick={() => this.updateSpeed('slow')}
                         />
                         <SpeedInput
                             checked={this.state.gameSpeed === 'normal'}
-                            name="normal"
+                            name='normal'
                             handleClick={() => this.updateSpeed('normal')}
                         />
                         <SpeedInput
                             checked={this.state.gameSpeed === 'fast'}
-                            name="fast"
+                            name='fast'
                             handleClick={() => this.updateSpeed('fast')}
                         />
                     </fieldset>
