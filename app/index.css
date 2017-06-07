@@ -1,27 +1,27 @@
-.game-board {
+.gameBoard {
     margin: 0 auto;
     position: relative;
     width: 500px;
 }
 
-.cycle-speed {
+.cycleSpeed {
     margin-bottom: 20px;
 }
 
-.game-board .button {
+.gameBoard .button {
     display: block;
     height: 50px;
     margin: 20px auto;
     width: 200px;
 }
 
-.cell-row:after {
+.cellRow:after {
     clear: both;
     content: '';
     display: table;
 }
 
-.cell-row {
+.cellRow {
     height: 50px;
     width: 100%;
 }
@@ -41,11 +41,12 @@
     width: 50px;
 }
 
-.cell.alive {
+.cellAlive {
     background: cyan;
+    composes: cell;
 }
 
-.history-length {
+.historyLength {
     background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
     background-size: 1800% 1800%;
     border-radius: 10px;
