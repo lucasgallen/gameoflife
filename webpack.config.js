@@ -1,6 +1,7 @@
 const path = require('path');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const PATHS = {
     app: path.join(__dirname, 'app'),
@@ -74,6 +75,25 @@ const commonConfig = merge([
 ]);
 
 const productionConfig = merge([
+    {
+        plugins: [
+            new webpack.optimize.UglifyJsPlugin({
+                beautify: false,
+                mangle: {
+                    screw_ie8: true,
+                    keep_fnames: true,
+                },
+                compress: {
+                    screw_ie8: true,
+                },
+                comments: false,
+            }),
+
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify('production')
+            }),
+        ],
+    },
 ]);
 
 const developmentConfig = merge([
