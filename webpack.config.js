@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const PATHS = {
     app: path.join(__dirname, 'app'),
     'node_modules': path.join(__dirname, 'node_modules'),
-    build: path.join(__dirname, 'dist'),
+    build: path.join(__dirname, 'build'),
 };
 
 const commonConfig = merge([
