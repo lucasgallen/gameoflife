@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PATHS = {
     app: path.join(__dirname, 'app'),
     'node_modules': path.join(__dirname, 'node_modules'),
-    build: path.join(__dirname, 'build'),
+    build: path.join(__dirname, 'dist'),
 };
 
 const commonConfig = merge([
