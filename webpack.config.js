@@ -10,6 +10,9 @@ const PATHS = {
 
 const commonConfig = merge([
     {
+        resolve: {
+            extensions: ['.js', '.jsx'],
+        },
         entry: {
             app: PATHS.app,
         },
@@ -28,7 +31,7 @@ const commonConfig = merge([
         module: {
             rules: [
                 {
-                    test: /\.js$/,
+                    test: /\.jsx?$/,
                     include: PATHS.app,
                     exclude(path) {
                         return path.match(/node_modules/);
