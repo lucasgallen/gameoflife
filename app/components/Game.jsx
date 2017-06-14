@@ -190,13 +190,21 @@ class Game extends React.Component {
 
         const gameSpeed = speedKey[this.state.gameSpeed];
 
+        const width = this.props.cellsPerRow * 50 + 'px';
+        const gameDim = {
+            width: width
+        };
+
         if (this.state.isLive) {
             timeoutID = setTimeout(() => this.runGame(), gameSpeed);
         }
 
         return (
             <div className='game'>
-                <div className={styles.gameBoard}>
+                <div
+                    className={styles.gameBoard}
+                    style={gameDim}
+                >
                     <div
                         onMouseDownCapture={(e) => this.handleMouseDown(e)}
                     >

@@ -1,7 +1,6 @@
 .gameBoard {
     margin: 0 auto;
     position: relative;
-    width: 500px;
 }
 
 .cycleSpeed {
