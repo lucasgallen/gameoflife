@@ -4,6 +4,7 @@ import Board from './game/Board';
 import PlayPause from './game/PlayPause';
 import SpeedInput from './game/SpeedInput';
 import HistorySlider from './game/HistorySlider';
+import DimChanger from './game/DimChanger';
 
 import board from '../board.js';
 import styles from '../index.css';
@@ -266,6 +267,12 @@ class Game extends React.Component {
                             handleClick={() => this.updateSpeed('fast')}
                         />
                     </fieldset>
+
+                    <DimChanger
+                        numRows={numRows}
+                        cellsPerRow={cellsPerRow}
+                        resetGame={(rows,cells) => this.resetGame(rows,cells)}
+                    />
 
                     <HistorySlider
                         min={1}
