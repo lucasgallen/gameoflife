@@ -29,6 +29,8 @@ class Game extends React.Component {
                     });
                 })
             }],
+            numRows: numRows,
+            cellsPerRow: cellsPerRow,
             stepNumber: 0,
             isLive: false,
             gameSpeed: 'normal',
@@ -181,6 +183,8 @@ class Game extends React.Component {
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
+        const numRows = this.state.numRows;
+        const cellsPerRow = this.state.cellsPerRow;
 
         const speedKey = {
             'slow' : 1500,
@@ -190,7 +194,7 @@ class Game extends React.Component {
 
         const gameSpeed = speedKey[this.state.gameSpeed];
 
-        const width = this.props.cellsPerRow * 50 + 'px';
+        const width = cellsPerRow * 50 + 'px';
         const gameDim = {
             width: width
         };
