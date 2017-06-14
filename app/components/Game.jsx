@@ -37,6 +37,31 @@ class Game extends React.Component {
         };
     }
 
+    resetGame(rows, cells) {
+        const numRows = rows ? rows : this.state.numRows;
+        const cellsPerRow = cells ? cells : this.state.cellsPerRow;
+
+        this.clearTimeout();
+
+        this.setState({
+            history: [{
+                cellRows: Array(numRows).fill(0).map(() => {
+                    return Array(cellsPerRow).fill(0).map(() => {
+                        return {
+                            isAlive: false,
+                            nghbrCount: 0
+                        };
+                    });
+                })
+            }],
+
+            stepNumber: 0,
+            isLive: false,
+            numRows: numRows,
+            cellsPerRow: cellsPerRow,
+        });
+    }
+
     clearTimeout() {
         if (timeoutID) {
             clearTimeout(timeoutID);
