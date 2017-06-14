@@ -25,6 +25,10 @@
     width: 100%;
 }
 
+.cellRow:not(:last-child) .cell {
+    border-bottom: none;
+}
+
 .cell {
     background: #fff;
     border: 1px solid #999;
