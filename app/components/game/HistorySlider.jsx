@@ -9,10 +9,11 @@ class HistorySlider extends React.Component {
         return (
             <fieldset className='history-slider'>
                 <legend>History Slider</legend>
-                <div className={styles.historyLength}>{this.props.max}</div>
+                <div className={styles.historyLength}>{this.props.currentStep}</div>
                 <Slider
                     min={this.props.min}
                     max={this.props.max}
+                    value={this.props.currentStep}
                     onChange={(step) => this.props.handleChange(step)}
                 />
             </fieldset>

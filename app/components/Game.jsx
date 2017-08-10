@@ -131,19 +131,27 @@ class Game extends React.Component {
 
     runGame() {
         const history = JSON.parse(JSON.stringify(this.state.history));
-        const current = history[history.length - 1];
-        const rows = current.cellRows.slice();
-        const newBoard = board.getNewBoard(rows);
+        const stepNumber = this.state.stepNumber;
 
-        this.setState({
-            history: history.concat([{
-                cellRows: newBoard.rows
-            }]),
-            stepNumber: history.length
-        });
+        if (stepNumber + 1 === history.length) {
+            const current = history[history.length - 1];
+            const rows = current.cellRows.slice();
+            const newBoard = board.getNewBoard(rows);
 
-        if (newBoard.allCellsDead) {
-            this.toggleGame();
+            this.setState({
+                history: history.concat([{
+                    cellRows: newBoard.rows
+                }]),
+                stepNumber: history.length
+            });
+
+            if (newBoard.allCellsDead) {
+                this.toggleGame();
+            }
+        } else {
+            this.setState({
+                stepNumber: stepNumber + 1
+            });
         }
     }
 
@@ -277,6 +285,7 @@ class Game extends React.Component {
                     <HistorySlider
                         min={1}
                         max={history.length - 1}
+                        currentStep={this.state.stepNumber}
                         handleChange={(step) => this.slideHistory(step)}
                     />
                 </div>
