@@ -10,8 +10,6 @@ import board from '../board.js';
 import styles from '../index.css';
 
 
-let timeoutID = null;
-
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -36,6 +34,8 @@ class Game extends React.Component {
             isLive: false,
             gameSpeed: 'normal',
         };
+
+        this.timeoutID = null;
     }
 
     resetGame(rows, cells) {
@@ -64,9 +64,9 @@ class Game extends React.Component {
     }
 
     clearTimeout() {
-        if (timeoutID) {
-            clearTimeout(timeoutID);
-            timeoutID = null;
+        if (this.timeoutID) {
+            clearTimeout(this.timeoutID);
+            this.timeoutID = null;
         }
     }
 
@@ -226,7 +226,7 @@ class Game extends React.Component {
         };
 
         if (this.state.isLive) {
-            timeoutID = setTimeout(() => this.runGame(), gameSpeed);
+            this.timeoutID = setTimeout(() => this.runGame(), gameSpeed);
         }
 
         return (
